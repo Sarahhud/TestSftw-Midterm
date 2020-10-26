@@ -14,29 +14,41 @@
 
 # Airport data provided by David Megginson (http://ourairports.com/data/).
 
+import io
+import math
+import array
 import csv
 import io
 
 class Airports(object):
-  """An interface for reading data about airports."""
+    print("Test")
 
-  def __init__(self):
-    with open('third_party/airports.csv', 'r') as f:
-      self.airport_file = io.StringIO(f.read())
-      self.airport_reader = csv.DictReader(self.airport_file)
+    def __init__(self):
+        with open('third_party/airports.csv', 'r') as f:
+            self.airport_file = io.StringIO(f.read())
+            self.airport_reader = csv.DictReader(self.airport_file)
 
-  def get_airport_by_iata(self, iata_code):
-    """Given an IATA code, look up that airport's name.
-
-    Args:
-      iata_code: (string) The IATA code of the airport to find.
-
-    Returns:
-      string: The airport name, if found.
-      None: The airport was not found.
-    """
-    self.airport_file.seek(0)
-    for row in self.airport_reader:
-      if row['iata_code'] == iata_code:
-        return row['name']
-    return None
+    def get_airport_by_iata(self, iata_code):
+        if iata_code.isdigit():
+            size = int(iata_code)
+        else:
+            return("Not valid number.")
+        table = [[2.4,1.05,2.5],[0.38,3.0,1.12],[2.5,0.35,3.6],[1.20,2.5,0.32]]
+        effort = None
+        time = None
+        staff = None
+        model = None
+        newSize = int(size)
+        if newSize >= 2 and size <=50:
+            model=0 
+        
+        elif newSize > 50 and size <= 300:
+            model=1
+        
+        elif newSize > 300:
+            model=2
+        
+        effort = table[0][model]*pow(newSize,table[1][model])
+        time = table[2][model]*pow(effort,table[3][model]) 
+        staff = math.ceil(effort/time)
+        return ('The number of staff needed to complete your project is... %d' % staff)
